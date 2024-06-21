@@ -1,91 +1,72 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_series/controller/storageController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
+
 class LeaveApproveScreen extends StatefulWidget {
-  // const LeaveApproveScreen({super.key, required this.dashboardResponseModel, this.isFinalLeave = false});
- // final DashboardResponseModel dashboardResponseModel;
- //  final bool isFinalLeave;
+
 
   @override
   State<LeaveApproveScreen> createState() => _LeaveApproveScreenState();
 }
 
 class _LeaveApproveScreenState extends State<LeaveApproveScreen> {
- // late final LeaveApproveScreenController _controller;
- //  @override
- //  void initState() {
- //    super.initState();
- //    _controller = Get.put(LeaveApproveScreenController(dashboardResponseModel: widget.dashboardResponseModel, isFinalLeave: widget.isFinalLeave));
- //  }
+
+StorageController store=Get.put(StorageController());
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<Map<String, dynamic>?> fetchLeaveApplication(String email) async {
+    try {
+      DocumentSnapshot doc = await _firestore.collection('ABC Company').doc('leave_application_document').collection('applications').doc(email).get();
+      return doc.data() as Map<String, dynamic>?;
+    } catch (e) {
+      print("Error fetching leave application: $e");
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
-    // return WillPopScope(
-    //   onWillPop: () async => await Get.delete<LeaveApproveScreenController>(),
-    //   child: Scaffold(
-    //     appBar: AppBar(
-    //       title: Text(!_controller.isFinalLeave ? "Leave Approve" : "Final Leave Approve"),
-    //       leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new_outlined), onPressed: () => Get.back()),
-    //     ),
-    //     body: Obx(
-    //       () => Column(
-    //         children: [
-    //           CustomConnectivityBanner(),
-    //           if (_controller.isLoading.value) const LinearProgressIndicator(),
-    //           Expanded(
-    //             child: LayoutBuilder(
-    //               builder: (context, box) => RefreshIndicator(
-    //                 onRefresh: () async => await _controller.getData(),
-    //                 child: SingleChildScrollView(
-    //                   child: Container(
-    //                     width: double.infinity,
-    //                     constraints: BoxConstraints(minHeight: box.maxHeight + 0.01),
-    //                     child: LeaveApproveScreenList(),
-    //                   ),
-    //                 ),
-    //               ),
-    //             ),
-    //           )
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("See application status"),
+      ),
+      body: Column(
+        children: [
+
+
+          SizedBox(height: 20),
+          FutureBuilder<Map<String, dynamic>?>(
+            future: fetchLeaveApplication(store.userEmail.toString()),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data == null) {
+                return Text('No leave application found.');
+              } else {
+                Map<String, dynamic> data = snapshot.data!;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Date: ${data['Date']}'),
+                    Text('Reason: ${data['Reason']}'),
+                    Text('Leave Type: ${data['Leave Type']}'),
+                    Text('Result: ${data['result']}'),
+                  ],
+                );
+              }
+            },
+          ),
+        ],
+      ),
+
+
+    );
   }
 }
-
-// class LeaveApproveScreenList extends StatelessWidget {
-//   LeaveApproveScreenList({super.key});
-//
-//   final LeaveApproveScreenController _controller = Get.find();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Obx(
-//       () => Column(
-//         children: [
-//           SizedBox(height: defaultPadding / 4),
-//           if (_controller.response.isEmpty && !_controller.isLoading.value)
-//             const WarningMessage()
-//           else
-//             for (AppliedLeaveApplicationModel i in _controller.response)
-//               CustomLeaveListTile(
-//                 key: ValueKey(i.leaveId.toString()),
-//                 model: i,
-//                 onTapAccept: () async => await _controller.onChange(leaveId: i.leaveId.toString(), isApproved: true),
-//                 onDoneAccept: (isAccept) async {
-//                   if (isAccept != null && isAccept) _controller.response.remove(i);
-//                 },
-//                 onTapReject: () async => await _controller.onChange(leaveId: i.leaveId.toString(), isApproved: false),
-//                 onDoneReject: (isAccept) async {
-//                   if (isAccept != null && isAccept) _controller.response.remove(i);
-//                 },
-//               ),
-//           SizedBox(height: MediaQuery.of(context).padding.bottom + defaultPadding)
-//         ],
-//       ),
-//     );
-//   }
-// }

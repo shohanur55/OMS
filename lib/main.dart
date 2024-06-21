@@ -6,7 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'checkUser_login_or_not.dart';
 import 'components.dart';
+import 'controller/dataController.dart';
 
 
 void main() async{
@@ -30,9 +32,9 @@ class MyApp extends StatelessWidget {
         initialBinding: InitialBinding(),
         debugShowCheckedModeBanner: false,
         theme: themeLight,
-        home: DashBoardScreen(),
+        home: CheckUser_login_or_not(),
       ),
-      child: DashBoardScreen(),
+      child: CheckUser_login_or_not(),
     );
   }
 }
@@ -40,6 +42,6 @@ class MyApp extends StatelessWidget {
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-  //  Get.put(DataController());
+   Get.put(DataController());
   }
 }

@@ -1,210 +1,197 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_series/controller/storageController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../components.dart';
+import '../widget/base_components/custom_animated_size_widget.dart';
+import '../widget/boxes/custom_card.dart';
+import '../widget/boxes/custom_connectivity_banner.dart';
 
 
 
 class PayslipScreen extends StatefulWidget {
-  // const PayslipScreen({super.key, required this.dashboardResponseModel});
-  // final DashboardResponseModel dashboardResponseModel;
+
 
   @override
   State<PayslipScreen> createState() => _PayslipScreenState();
 }
 
 class _PayslipScreenState extends State<PayslipScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Get.put(PayslipScreenController(widget.dashboardResponseModel));
-  // }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
-    // return WillPopScope(
-    //   onWillPop: () async => await Get.delete<PayslipScreenController>(),
-    //   child: Scaffold(
-    //     appBar: AppBar(
-    //       title: const Text("Payslip"),
-    //       leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new_outlined), onPressed: () => Get.back()),
-    //     ),
-    //     body: Column(
-    //       children: [
-    //         CustomConnectivityBanner(),
-    //         PayslipScreenInformation(),
-    //         PayslipScreenSelectDate()
-    //       ],
-    //     ),
-    //   ),
-    // );
+
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Payslip"),
+          leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new_outlined), onPressed: () => Get.back()),
+        ),
+        body: Column(
+          children: [
+            CustomConnectivityBanner(),
+            PayslipScreenInformation(),
+           // PayslipScreenSelectDate()
+          ],
+        ),
+
+    );
   }
 }
-//
-// class PayslipScreenInformation extends StatelessWidget {
-//   PayslipScreenInformation({super.key});
-//
-//   final PayslipScreenController _controller = Get.find();
-//
-//   Widget _setData(BuildContext context, String s, bool isLoading, Widget child, {bool isWarning = false}) {
-//     return CustomAnimatedSize(
-//       widthFactor: 1,
-//       alignment: Alignment.topCenter,
-//       child: CustomCard(
-//         isLoading: isLoading,
-//         margin: EdgeInsets.all(defaultPadding / 2),
-//         heading: Container(
-//           color: !isWarning ? Theme.of(context).primaryColor : Theme.of(context).colorScheme.error,
-//           padding: EdgeInsets.symmetric(vertical: defaultPadding / 4),
-//           alignment: Alignment.center,
-//           child: Text(
-//             s,
-//             textAlign: TextAlign.center,
-//             style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).canvasColor, fontWeight: FontWeight.bold),
-//           ),
-//         ),
-//         child: child,
-//       ),
-//     );
-//   }
-//
-//   Widget _steValue(BuildContext context, String heading, String? value, {bool isMain = false}) {
-//     return DefaultTextStyle(
-//       style: Theme.of(context).textTheme.labelSmall?.copyWith(color: isMain ? Theme.of(context).primaryColor : null, fontWeight: isMain ? FontWeight.bold : null) ?? const TextStyle(),
-//       child: Row(
-//         children: [
-//           Expanded(child: Text(heading)),
-//           Expanded(child: Text(value ?? "0", textAlign: TextAlign.end)),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(child: LayoutBuilder(
-//       builder: (context, box) {
-//         return RefreshIndicator(
-//           onRefresh: () async => await _controller.getData(),
-//           child: SingleChildScrollView(
-//             child: Obx(
-//               () => Container(
-//                 constraints: BoxConstraints(minHeight: box.maxHeight + 0.01),
-//                 child: Column(
-//                   children: [
-//                     _setData(
-//                       context,
-//                       "Total Addition",
-//                       _controller.isLoading.value,
-//                       Column(
-//                         children: [
-//                           _steValue(context, "Gross salary", _controller.response.value?.grossSalay),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Basic Salary", _controller.response.value?.basicSalary),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "House Rent", _controller.response.value?.houseRent),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Medical Allowance", _controller.response.value?.medicalAllowance),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Food Allowance", _controller.response.value?.foodAllowance),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Conveyance", _controller.response.value?.conveyance),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Attendance Bonus", _controller.response.value?.attendanceBonus),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Others Allowance", "----"),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Total Payable", _controller.response.value?.totalPayable, isMain: true),
-//                         ],
-//                       ),
-//                     ),
-//
-//                     _setData(
-//                       context,
-//                       "Total Deduction",
-//                       isWarning: true,
-//                       _controller.isLoading.value,
-//                       Column(
-//                         children: [
-//                           _steValue(context, "Absent Deduction", _controller.response.value?.absentDeduction),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Provident Fund", _controller.response.value?.providentFund),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "ADV", "----"),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Stamp", _controller.response.value?.stamp),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Others Deduct", _controller.response.value?.othersDeduct),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Total Deduct", _controller.response.value?.totalDeduct),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Net Salary", _controller.response.value?.netSalary),
-//                           Divider(height: defaultPadding / 4),
-//                           _steValue(context, "Net Salary Payable", _controller.response.value?.netSalaryPayable, isMain: true),
-//                         ],
-//                       ),
-//                     ),
-//                     // _setHeading(context, "Total Deduction", isWarning: true),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//         );
-//       },
-//     ));
-//   }
-// }
-//
-// class PayslipScreenSelectDate extends StatelessWidget {
-//   PayslipScreenSelectDate({super.key});
-//
-//   final PayslipScreenController _controller = Get.find();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return CustomElevatedButton(
-//       expanded: true,
-//       margin: EdgeInsets.only(
-//         bottom: MediaQuery.of(context).padding.bottom + defaultPadding / 2,
-//         top: defaultPadding / 2,
-//         left: defaultPadding / 2,
-//         right: defaultPadding / 2,
-//       ),
-//       onTap: () async {
-//         if (_controller.dateList.isEmpty) await _controller.getData();
-//         if (_controller.dateList.isEmpty) return false;
-//         if (!context.mounted) return null;
-//
-//         PayslipDateModel? res = await showDialog<PayslipDateModel>(
-//             context: context,
-//             builder: (context) {
-//               return CustomPopUpWindow(
-//                 title: const Text("Select Date"),
-//                 child: Column(
-//                   children: [
-//                     for (PayslipDateModel i in _controller.dateList)
-//                       CustomElevatedButton(
-//                         expanded: true,
-//                         backgroundColor: _controller.selectedDate.value != null && _controller.selectedDate.value!.dateTime == i.dateTime ? null : Theme.of(context).primaryColor.withOpacity(0.5),
-//                         margin: EdgeInsets.symmetric(vertical: defaultPadding / 8),
-//                         onDone: (_) => Get.back<PayslipDateModel>(result: i),
-//                         child: Text(i.dateTime!),
-//                       )
-//                   ],
-//                 ),
-//               );
-//             });
-//
-//         if (res == null) return null;
-//         if (_controller.selectedDate.value != null && res.dateTime == _controller.selectedDate.value?.dateTime) return null;
-//
-//         _controller.selectedDate.value = res;
-//         await _controller.getInfo();
-//
-//         return null;
-//       },
-//       child: Obx(() => Text(_controller.selectedDate.value?.dateTime ?? "Select Date")),
-//     );
-//   }
-// }
+
+class PayslipScreenInformation extends StatelessWidget {
+  PayslipScreenInformation({super.key});
+
+
+
+  Widget _setData(BuildContext context, String s, bool isLoading, Widget child, {bool isWarning = false}) {
+    return CustomAnimatedSize(
+      widthFactor: 1,
+      alignment: Alignment.topCenter,
+      child: CustomCard(
+        isLoading: isLoading,
+        margin: EdgeInsets.all(defaultPadding / 2),
+        heading: Container(
+          color: !isWarning ? Theme.of(context).primaryColor : Theme.of(context).colorScheme.error,
+          padding: EdgeInsets.symmetric(vertical: defaultPadding / 4),
+          alignment: Alignment.center,
+          child: Text(
+            s,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).canvasColor, fontWeight: FontWeight.bold),
+          ),
+        ),
+        child: child,
+      ),
+    );
+  }
+
+  Widget _steValue(BuildContext context, String heading, dynamic? value, {bool isMain = false}) {
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: isMain ? Theme.of(context).primaryColor : null, fontWeight: isMain ? FontWeight.bold : null) ?? const TextStyle(),
+      child: Row(
+        children: [
+          Expanded(child: Text(heading)),
+          Expanded(child: Text(value.toString() ?? "0", textAlign: TextAlign.end)),
+        ],
+      ),
+    );
+  }
+StorageController store=Get.put(StorageController());
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(child: LayoutBuilder(
+      builder: (context, box) {
+        return StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance.collection('ABC Company').doc(store.userEmail.value).snapshots(),
+          builder: (context, snapshot) {
+
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return Center(child: Text('Document does not exist'));
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            // Check if the document exists
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return Center(child: Text('Document does not exist'));
+            }
+
+            // Access the specific fields from the document
+            var data = snapshot.data!.data() as Map<String, dynamic>;
+
+            return SingleChildScrollView(
+              child: Container(
+                constraints: BoxConstraints(minHeight: box.maxHeight + 0.01),
+                child: Column(
+                  children: [
+                    _setData(
+                      context,
+                      "Total Addition",
+                      false,
+                      Column(
+                        children: [
+                          _steValue(context, "Gross salary",
+                              data['salarylist']['gross'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Basic Salary",
+                              data['salarylist']['basic'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "House Rent",
+                              data['salarylist']['house'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Medical Allowance",
+                              data['salarylist']['medical'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Food Allowance",
+                              data['salarylist']['food'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Conveyance",
+                              data['salarylist']['conve'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Attendance Bonus",
+                              data['salarylist']['attendence'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Others Allowance",
+                              data['salarylist']['others'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Total Payable",
+                              data['salarylist']['totalp'] ?? "0.0",
+                              isMain: true),
+                        ],
+                      ),
+                    ),
+
+                    _setData(
+                      context,
+                      "Total Deduction",
+                      isWarning: true,
+                      false,
+                      Column(
+                        children: [
+                          _steValue(context, "Absent Deduction",
+                              data['salarylist']['absent'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Provident Fund",
+                              data['salarylist']['providentf'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(
+                              context, "ADV", data['salarylist']['adv'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Stamp",
+                              data['salarylist']['stamp'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Others Deduct",
+                              data['salarylist']['otherdeduct'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Total Deduct",
+                              data['salarylist']['totaldeduct'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Net Salary",
+                              data['salarylist']['netSalary'] ?? "0.0"),
+                          Divider(height: defaultPadding / 4),
+                          _steValue(context, "Net Salary Payable",
+                              data['salarylist']['netpayable'] ??"0.0",
+                              isMain: true),
+                        ],
+                      ),
+                    ),
+                    // _setHeading(context, "Total Deduction", isWarning: true),
+                  ],
+                ),
+              ),
+
+            );} );
+      },
+    ));
+  }
+}
+
+

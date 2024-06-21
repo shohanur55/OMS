@@ -6,12 +6,13 @@ import 'package:get/get.dart';
 
 import 'Firebase_part/firebase_func.dart';
 import 'components.dart';
+import 'controller/storageController.dart';
 import 'widget/custom_elevated_button_widget.dart';
 
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
-
+  StorageController store = Get.put(StorageController());
   //final LoginScreenController _controller = Get.put(LoginScreenController());
 
   final _formKey = GlobalKey<FormState>();
@@ -28,11 +29,15 @@ class LoginScreen extends StatelessWidget {
       // ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(defaultPadding),
+          padding: EdgeInsets.all(30),
           child: Form(
             key: _formKey,
-            child: Column(
+            child: ListView(
+
               children: [
+                Center(child: Text("Office Management System",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 22,),)),
+                SizedBox(height: defaultPadding),
+                Text("Please Login",style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold,fontSize: 22,),),
                 SizedBox(height: defaultPadding),
                 //Image.asset("lib/assets/logo/logo.png", height: defaultPadding),
                 SizedBox(height: defaultPadding),
@@ -60,20 +65,7 @@ class LoginScreen extends StatelessWidget {
 
               ),
                 SizedBox(height: defaultPadding / 2),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: CustomElevatedButton(
-                    contentPadding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                    constraints: null,
-                    height: defaultPadding,
-                    iconHeight: defaultPadding / 2,
-                   // onTap: () async => await _controller.forgotPassword(),
-                    child: Text(
-                      "Forgot Password?",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                ),
+
                 SizedBox(height: defaultPadding),
                 CustomElevatedButton(
                   expanded: true,
@@ -81,6 +73,7 @@ class LoginScreen extends StatelessWidget {
                   child: const Text("Login"),
 
                   onTap:() {
+                    store.saveEmail(emailcontroller.text);
                     Firebase_func.logIn(
                         context,
                         emailcontroller.text.toString(),

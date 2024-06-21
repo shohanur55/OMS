@@ -2,7 +2,7 @@ class DashboardMenuModel {
   int? menuId;
   String? menuName;
 
-  DashboardMenuModel({this.menuId, this.menuName});
+  DashboardMenuModel({required this.menuId, required this.menuName});
 
   DashboardMenuModel.fromJson(Map<String, dynamic> json) {
     menuId = json['MenuId'];
@@ -38,6 +38,18 @@ class DashboardMenuModel {
       return "${folder}slip.png";
     }else if (menuId == 1346) {
       return "${folder}setleave.png";
+    }else if (menuId == 1347) {
+      return "${folder}slip.png";
+    }else if (menuId == 1348) {
+      return "${folder}leave_application.png";
+    } else if (menuId == 1349) {
+      return "${folder}contact.png";
+    } else if (menuId == 1350) {
+      return "${folder}contact.png";
+    }else if (menuId == 1351) {
+      return "${folder}contact.png";
+    }else if (menuId == 1352) {
+      return "${folder}contact.png";
     } else {
       return "${folder}in_progress.png";
     }

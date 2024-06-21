@@ -1,17 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_series/app_screens/addEmployee.dart';
+import 'package:firebase_series/app_screens/applicationList.dart';
 import 'package:firebase_series/app_screens/emplyeeListScreen.dart';
+import 'package:firebase_series/app_screens/hrandfinace.dart';
+import 'package:firebase_series/app_screens/seeEmpSalary.dart';
 import 'package:firebase_series/app_screens/setLeaveType.dart';
+import 'package:firebase_series/app_screens/setSalary.dart';
+import 'package:firebase_series/controller/dataController.dart';
+import 'package:firebase_series/controller/storageController.dart';
+import 'package:firebase_series/splash_screen.dart';
+import 'package:firebase_series/uiHelper.dart';
 import 'package:firebase_series/widget/base_components/custom_animated_size_widget.dart';
 import 'package:firebase_series/widget/base_components/custom_elevated_button_widget.dart';
+import 'package:firebase_series/widget/boxes/custom_connectivity_banner.dart';
 import 'package:firebase_series/widget/boxes/warning_message.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'app_screens/attendance_history_screen.dart';
 import 'app_screens/attendance_screen.dart';
+import 'app_screens/contactwithFinance.dart';
+import 'app_screens/contactwithIt.dart';
+import 'app_screens/employeeAttendence.dart';
+import 'app_screens/hrandit.dart';
 import 'app_screens/leave_application_screen.dart';
 import 'app_screens/leave_approve_screen.dart';
 import 'app_screens/payslip_screen.dart';
@@ -27,12 +42,20 @@ class DashBoardScreen extends StatefulWidget {
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  DataController _controller = Get.put(DataController());
+  StorageController store=Get.put(StorageController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.initApp();
+  }
 
   Future<Map<String, dynamic>> _fetchDocumentData() async {
     try {
       DocumentSnapshot documentSnapshot = await _firestore
           .collection('ABC Company')
-          .doc('mshohan088@gmail.com')
+          .doc(store.userEmail.value)
           .get();
       return documentSnapshot.data() as Map<String, dynamic> ?? {};
     } catch (e) {
@@ -103,22 +126,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   //     ),
   //   );
   // }
-/*  final DashboardScreenController _controller = Get.put(DashboardScreenController());
-  final DataController _dataController = Get.find();
-
-  Widget? _image(BuildContext context, String? image64) {
-    Widget? we;
-    if (_controller.response.value == null && _controller.isLoading.value) {
-      we = LinearProgressIndicator(
-        color: Theme.of(context).primaryColor.withOpacity(0.1),
-      );
-    } else {
-      Uint8List? x = imageStringToByte(image64);
-      if (x != null) we = Image.memory(x);
-    }
-
-    return we;
-  }*/
 
   void goNextPage(int id) {
     print("DashboardScreenController: Showing page for menuId: $id");
@@ -129,11 +136,17 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       1341: PayslipScreen(),
       1342: AttendanceHistoryScreen(),
       1339: LeaveApproveScreen(),
-      1340:EmployeeListScreen(),
-      1343:AddEmployeeScreen(),
-      1344:AttendanceHistoryScreen(),//have to change
-      1345:PayslipScreen(),//have to change
-      1346:SetLeaveType(),
+      1340: EmployeeListScreen(),
+      1343: AddEmployeeScreen(),
+      1344: EmployeeAttendence(),
+      1345: Setsalary(),
+      1346: SetLeaveType(),
+      1347: Seeempsalary(),
+      1348: Applicationlist(),
+      1349: Contactwithit(),
+      1350: Contactwithfinance(),
+      1351: Hrandit(),
+      1352: hrandFinance(),
     };
 
     if (map[id] == null) {
@@ -170,14 +183,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           //! ---------------------------------------------------------------------------------------- Actions
           actions: [
             IconButton(
-                onPressed: () {
-                  //   if (_controller.response.value == null) {
-                  //     showToast(message: "Please Wait");
-                  //     return;
-                  //   }
-                  // Get.to(() => NotificationScreen(dashboardResponseModel: _controller.response.value!));
+                onPressed: () async{
+                  UiHelper.logoutdialog(context, "Are You Sure For Logout?");
                 },
-                icon: const Icon(Icons.notifications)),
+                icon: const Icon(Icons.more_vert)),
             //IconButton(onPressed: _controller.onPressDrawerButton, icon: const Icon(Icons.more_vert_rounded))
           ],
         ),
@@ -193,15 +202,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               } else {
                 Map<String, dynamic> data = snapshot.data!;
                 List<DashboardMenuModel> menuList = _parseMenuList(data);
-
+                _controller.menu.value = menuList;
                 if (menuList.isEmpty) {
                   return Center(child: Text('No menu records found.'));
                 }
 
                 return ListView(
-
                   children: [
-                    //CustomConnectivityBanner(),
+                    CustomConnectivityBanner(),
 
                     //! -------------------------------------------------------------------------------------- UserInfo
                     Padding(
@@ -260,7 +268,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                         .canvasColor),
                                             children: [
                                               TextSpan(
-                                                text: data['Name'],
+                                                text: data['Designation'],
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .labelMedium
@@ -274,7 +282,43 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                           ),
                                         ),
                                 ),
-
+                                SizedBox(
+                                  height: 5.sp,
+                                ),
+                                CustomAnimatedSize(
+                                  widthFactor: 1,
+                                  alignment: Alignment.topCenter,
+                                  child: data['Department'] == null
+                                      ? null
+                                      : Text.rich(
+                                          TextSpan(
+                                            text: "Department: ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium
+                                                ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .canvasColor),
+                                            children: [
+                                              TextSpan(
+                                                text: data['Department'],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Theme.of(context)
+                                                            .canvasColor),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                ),
+                                SizedBox(
+                                  height: 5.sp,
+                                ),
                                 // Company
                                 Text.rich(
                                   TextSpan(
@@ -303,12 +347,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                               ],
                             ),
                           ),
-
-
                         ],
                       ),
                     ),
-
+                    SizedBox(
+                      height: 20.h,
+                    ),
                     //! -------------------------------------------------------------------------------------- Menus
                     Expanded(
                       child: Container(
@@ -320,51 +364,61 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                         child:
                             //Positioned(child: Obx(() => !_controller.isLoading.value ? const SizedBox() : const LinearProgressIndicator())),
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: defaultPadding / 2),
-                              child: SingleChildScrollView(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                                  width: double.infinity,
-                                  child: Wrap(
-                                    alignment: WrapAlignment.center,
-                                    children: [
-                                      if (menuList.isEmpty)
-                                        const WarningMessage(
-                                            message: "Something went wrong.\nTry again later."),
-                                      for (DashboardMenuModel i in menuList ?? [])
-                                        CustomElevatedButton(
-                                          backgroundColor: Colors.transparent,
-                                          contentPadding: EdgeInsets.symmetric(vertical: 8.0),
-                                          constraints: BoxConstraints(maxWidth: 120),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    color: Theme.of(context).primaryColor,
-                                                    borderRadius: BorderRadius.circular(1000)),
-                                                margin: EdgeInsets.all(8.0),
-                                                padding: EdgeInsets.all(16.0),
-                                                width: 64,
-                                                height: 64,
-                                                child: Image.asset(i.image,),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                                child: Text(i.menuName ?? "",
-                                                    style: Theme.of(context).textTheme.labelLarge,
-                                                    textAlign: TextAlign.center),
-                                              ),
-                                            ],
+                          padding: EdgeInsets.symmetric(
+                              horizontal: defaultPadding / 2),
+                          child: SingleChildScrollView(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              width: double.infinity,
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                children: [
+                                  if (menuList.isEmpty)
+                                    const WarningMessage(
+                                        message:
+                                            "Something went wrong.\nTry again later."),
+                                  for (DashboardMenuModel i in menuList ?? [])
+                                    CustomElevatedButton(
+                                      backgroundColor: Colors.transparent,
+                                      contentPadding:
+                                          EdgeInsets.symmetric(vertical: 8.0),
+                                      constraints:
+                                          BoxConstraints(maxWidth: 100),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        1000)),
+                                            margin: EdgeInsets.all(8.0),
+                                            padding: EdgeInsets.all(16.0),
+                                            width: 64,
+                                            height: 64,
+                                            child: Image.asset(
+                                              i.image,
+                                            ),
                                           ),
-                                          onDone: (_) => goNextPage(i.menuId ?? 0),
-                                        ),
-                                    ],
-                                  ),
-                                ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Text(i.menuName ?? "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge,
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ],
+                                      ),
+                                      onDone: (_) => goNextPage(i.menuId ?? 0),
+                                    ),
+                                ],
                               ),
                             ),
-
+                          ),
+                        ),
                       ),
                     ),
                   ],

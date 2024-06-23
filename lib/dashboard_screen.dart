@@ -7,6 +7,8 @@ import 'package:firebase_series/app_screens/hrandfinace.dart';
 import 'package:firebase_series/app_screens/seeEmpSalary.dart';
 import 'package:firebase_series/app_screens/setLeaveType.dart';
 import 'package:firebase_series/app_screens/setSalary.dart';
+import 'package:firebase_series/app_screens/softwareHOD.dart';
+import 'package:firebase_series/app_screens/task.dart';
 import 'package:firebase_series/controller/dataController.dart';
 import 'package:firebase_series/controller/storageController.dart';
 import 'package:firebase_series/splash_screen.dart';
@@ -147,6 +149,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       1350: Contactwithfinance(),
       1351: Hrandit(),
       1352: hrandFinance(),
+      1353: Task(),
+      1354: Softwarehod(),
     };
 
     if (map[id] == null) {

@@ -1,4 +1,5 @@
 
+import 'package:firebase_series/departmentLogin.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // if (_controller.isLogin()) {
       //   Get.offAll(() => DashBoardScreen());
       // } else {
-         Get.offAll(() => LoginScreen());
+         Get.offAll(() => Departmentlogin());
       // }
     }
   }

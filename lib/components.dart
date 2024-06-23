@@ -5,6 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 const String appName = "Office Management System";
 const String appVersion = "1.0.0";
 
+class dept{
+  static const List<String> department = [
+    "HR Department",
+    "Accounts Department",
+    "Software Department",
+    "Marketing Department",
+  ];
+}
+
 
 
 //! Time

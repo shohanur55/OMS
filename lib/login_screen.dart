@@ -11,7 +11,8 @@ import 'widget/custom_elevated_button_widget.dart';
 
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+  String dept;
+  LoginScreen({super.key,required this.dept});
   StorageController store = Get.put(StorageController());
   //final LoginScreenController _controller = Get.put(LoginScreenController());
 
@@ -24,9 +25,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:Colors.white,
-      // floatingActionButton: DevAutoFillButton(
-      //   onPressed: () => _controller.dev(),
-      // ),
+     appBar: AppBar(
+       title: Text(dept+" Login"),
+       centerTitle: true,
+     ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(30),

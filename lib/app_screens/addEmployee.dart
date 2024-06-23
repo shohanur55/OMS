@@ -35,14 +35,17 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   TextEditingController salaryc = TextEditingController();
   TextEditingController rulec = TextEditingController();
 
+  String department = 'Select Department';
+  setDepartment(int index) {
+    department = dept.department[index];
 
-
+  }
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
 
   Future<void> saveData() async {
-    if (emailc.text=="" || namec.text == "" || departmentc.text == "" || designationc.text == "" ||
+    if (emailc.text=="" || namec.text == "" || department == 'Select Department' || designationc.text == "" ||
         salaryc.text == "" || rulec.text == "" || _controller.selectedOptionslist.value.isEmpty) {
 
       UiHelper.CustomAlertDialog(context, "Please fill up all requirement");
@@ -71,7 +74,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
     Map<String, dynamic> data = {
       'menulist': newMenuList,
       'Name': namec.text,
-      'Department': departmentc.text,
+      'Department': department,
       'Designation': designationc.text,
       'Salary': salaryc.text,
       'Rules': rulec.text,
@@ -143,6 +146,82 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                 height: 5.sp,
               ),
               Text(
+                "Department",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+           SizedBox(
+                height: 50,
+                child: GestureDetector(
+                    onTapDown: (tapDetails) {
+                      showMenu(
+                          context: context,
+                          position: RelativeRect.fromLTRB(tapDetails.globalPosition.dx, tapDetails.globalPosition.dy + 20, 0, 0),
+                          items: List.generate(
+                              dept.department.length,
+                                  (index) => PopupMenuItem(
+                                onTap: () {
+                                  setDepartment(index);
+                                  setState(() {
+
+                                  });
+                                },
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                              dept.department[index],
+                                              style: const TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                value: dept.department[index],
+                              )));
+                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(color: Colors.green, borderRadius: const BorderRadius.all(Radius.circular(10)), boxShadow: [
+                                BoxShadow(
+                                  spreadRadius: 1,
+                                  color: Colors.green,
+                                  blurRadius: 2,
+                                )
+                              ]),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 12.0),
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          department,
+                                          style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                            onPressed: null,
+                                            icon: Icon(
+                                              Icons.keyboard_arrow_down,
+                                              color:Colors.white,
+                                            ))
+                                      ],
+                                    )),
+                              ),
+                            ))
+                      ],
+                    )),
+              ),
+              Text(
                 "Email",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
@@ -170,20 +249,8 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
               SizedBox(
                 height: 5.sp,
               ),
-              Text(
-                "Department",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              CustomTextField1(
-                textEditingController: departmentc,
-                keyboardType: TextInputType.text,
-                hintText: "Enter employee department",
-                svg: "lib/assets/icons/message_icon.svg",
-                //validator: (value) => !_controller.isEmail.value ? null : emailValidation(_controller.email),
-              ),
-              SizedBox(
-                height: 5.sp,
-              ),
+
+
               Text(
                 "Designation",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

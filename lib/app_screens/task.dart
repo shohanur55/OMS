@@ -38,6 +38,7 @@ class _TaskState extends State<Task> {
       appBar: AppBar(
         title: Text("Task"),
         centerTitle: true,
+
         actions: [
           IconButton(onPressed: () {
             Get.to(()=>Giveresponse());
@@ -87,7 +88,7 @@ class _TaskState extends State<Task> {
                                 Text(
                                     'Task Description: ${attendanceMap['task_description']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
                                 Text(
-                                    'Task Duration: ${attendanceMap['duration']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
+                                    'Task Duration time: ${attendanceMap['duration']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
 
 
                               ],

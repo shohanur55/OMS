@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_series/app_screens/financeMessage.dart';
+import 'package:firebase_series/app_screens/financeReply.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../components.dart';
 import '../widget/base_components/custom_elevated_button_widget.dart';
@@ -42,6 +45,11 @@ class _ContactwithfinanceState extends State<Contactwithfinance> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Contact with finance"),
+        actions: [
+          IconButton(onPressed: (){
+            Get.to(()=>Financemessage());
+          }, icon: Icon(Icons.message_rounded)),
+        ],
       ),
       body: Column(
         children: [
@@ -58,7 +66,7 @@ class _ContactwithfinanceState extends State<Contactwithfinance> {
               ),
               child: TextField(
                 decoration:
-                InputDecoration(labelText: 'Enter Ruels and Regulations,',),
+                InputDecoration(labelText: 'Enter your description message',),
                 controller: textc,
                 keyboardType: TextInputType.multiline,
                 minLines: 5, // <-- SEE HERE

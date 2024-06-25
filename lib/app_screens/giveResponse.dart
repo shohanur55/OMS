@@ -7,26 +7,26 @@ import '../components.dart';
 import '../widget/base_components/custom_elevated_button_widget.dart';
 import '../widget/custom_text_field1.dart';
 
-class Giventask extends StatefulWidget {
-  const Giventask({super.key});
+class Giveresponse extends StatefulWidget {
+  const Giveresponse({super.key});
 
   @override
-  State<Giventask> createState() => _GiventaskState();
+  State<Giveresponse> createState() => _GiveresponseState();
 }
 
-class _GiventaskState extends State<Giventask> {
+class _GiveresponseState extends State<Giveresponse> {
 
   TextEditingController namec=TextEditingController();
   TextEditingController topicn=TextEditingController();
   TextEditingController topicd=TextEditingController();
-  TextEditingController durationc=TextEditingController();
+  TextEditingController status=TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
   Future<void> sendData() async {
     try {
-      DocumentReference docRef = _firestore.collection('ABC Company').doc('give_task');
+      DocumentReference docRef = _firestore.collection('ABC Company').doc('give_response');
 
       await _firestore.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);
@@ -36,11 +36,11 @@ class _GiventaskState extends State<Giventask> {
           transaction.set(docRef, {
             'task_list': [
               {
-               'datetime':DateFormat.yMMMd().format(DateTime.now()).toString(),
+                'datetime':DateFormat.yMMMd().format(DateTime.now()).toString(),
                 'name': namec.text,
                 'task_name':topicn.text,
                 'task_description':topicd.text,
-                'duration':durationc.text,
+                'status':status.text,
               }
             ]
           });
@@ -52,7 +52,7 @@ class _GiventaskState extends State<Giventask> {
             'name': namec.text,
             'task_name':topicn.text,
             'task_description':topicd.text,
-            'duration':durationc.text,
+            'status':status.text,
 
           });
 
@@ -80,14 +80,14 @@ class _GiventaskState extends State<Giventask> {
         child: ListView(
           children: [
             Text(
-              "Assign To",
+              "From",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
 
             CustomTextField1(
               textEditingController: namec,
               keyboardType: TextInputType.emailAddress,
-              hintText: "Enter employee name",
+              hintText: "Enter Your name",
               svg: "lib/assets/icons/message_icon.svg",
               //validator: (value) => !_controller.isEmail.value ? null : emailValidation(_controller.email),
             ),
@@ -125,13 +125,13 @@ class _GiventaskState extends State<Giventask> {
               ),
             ),
             Text(
-              "Duration",
+              "Task Status",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             CustomTextField1(
-              textEditingController: durationc,
+              textEditingController: status,
               keyboardType: TextInputType.text,
-              hintText: "Enter Task duration time",
+              hintText: "Enter Task Status (pending/Completed)",
               svg: "lib/assets/icons/message_icon.svg",
               //validator: (value) => !_controller.isEmail.value ? null : emailValidation(_controller.email),
             ),
@@ -146,7 +146,7 @@ class _GiventaskState extends State<Giventask> {
                     color: Theme.of(context).cardColor),
                 child: const Text("Send"),
                 onTap: () async{
-                 await sendData();
+                  await sendData();
 
 
                 }),

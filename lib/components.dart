@@ -12,6 +12,11 @@ class dept{
     "Software Department",
     "Marketing Department",
   ];
+  static const List<String> departments = [
+    "Accounts Department",
+    "Software Department",
+    "Marketing Department",
+  ];
 }
 
 

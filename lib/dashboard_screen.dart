@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_series/app_screens/ContactHR.dart';
+import 'package:firebase_series/app_screens/ContactMarketing.dart';
 import 'package:firebase_series/app_screens/addEmployee.dart';
+import 'package:firebase_series/app_screens/addNotificationScreen.dart';
 import 'package:firebase_series/app_screens/applicationList.dart';
 import 'package:firebase_series/app_screens/emplyeeListScreen.dart';
 import 'package:firebase_series/app_screens/hrandfinace.dart';
+import 'package:firebase_series/app_screens/notificationScreen.dart';
+import 'package:firebase_series/app_screens/rules.dart';
 import 'package:firebase_series/app_screens/seeEmpSalary.dart';
 import 'package:firebase_series/app_screens/setLeaveType.dart';
 import 'package:firebase_series/app_screens/setSalary.dart';
@@ -151,6 +156,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       1352: hrandFinance(),
       1353: Task(),
       1354: Softwarehod(),
+      1355: Contacthr(),
+      1356: Contactmarketing(),
+      1357: RulesR(),
     };
 
     if (map[id] == null) {
@@ -186,11 +194,33 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
           //! ---------------------------------------------------------------------------------------- Actions
           actions: [
+            _controller.departments=="register"?IconButton(onPressed: (){
+              Get.to(()=>Addnotificationscreen());
+            },
+                icon:Icon(Icons.notification_add_outlined) ):Text(""),
+
+           IconButton(onPressed: (){
+             if(_controller.departments=="HR Department"){
+               Get.to(()=>Addnotificationscreen());
+             }else{
+               Get.to(()=>notificationScreen());
+             }
+
+
+           }, icon:_controller.departments=="HR Department"? Icon(Icons.notification_add_outlined):Icon(Icons.notifications)) ,
+
+
+
             IconButton(
                 onPressed: () async{
+                  setState(() {
+
+                  });
                   UiHelper.logoutdialog(context, "Are You Sure For Logout?");
                 },
                 icon: const Icon(Icons.more_vert)),
+
+
             //IconButton(onPressed: _controller.onPressDrawerButton, icon: const Icon(Icons.more_vert_rounded))
           ],
         ),
@@ -210,6 +240,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 if (menuList.isEmpty) {
                   return Center(child: Text('No menu records found.'));
                 }
+_controller.departments=data['Department'];
 
                 return ListView(
                   children: [

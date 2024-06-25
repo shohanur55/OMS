@@ -1,27 +1,27 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_series/app_screens/givenTask.dart';
+import 'package:firebase_series/controller/dataController.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-class Softwarehod extends StatefulWidget {
-  const Softwarehod({super.key});
+class notificationScreen extends StatefulWidget {
+  const notificationScreen({super.key});
 
   @override
-  State<Softwarehod> createState() => _SoftwarehodState();
+  State<notificationScreen> createState() => _notificationScreenState();
 }
 
-class _SoftwarehodState extends State<Softwarehod> {
+class _notificationScreenState extends State<notificationScreen> {
 
+DataController _controller=Get.put(DataController());
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<Map<String, dynamic>> _fetchDocumentData() async {
     try {
       DocumentSnapshot documentSnapshot = await _firestore
           .collection('ABC Company')
-          .doc("give_response")
+          .doc(_controller.departments)
           .get();
       return documentSnapshot.data() as Map<String, dynamic> ?? {};
     } catch (e) {
@@ -29,22 +29,13 @@ class _SoftwarehodState extends State<Softwarehod> {
       return {};
     }
   }
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Employee response list"),
-        centerTitle: true,
-        actions: [
-          IconButton(onPressed: () {
-Get.to(()=>Giventask());
-          }, icon: Icon(Icons.add, size: 30.sp)),
-        ],
-      ),
+appBar: AppBar(
+  title: Text("Notification"),
+  centerTitle: true,
+),
 
       body:   Column(
         children: [
@@ -79,17 +70,12 @@ Get.to(()=>Giventask());
                           child: ListTile(
                             tileColor: Theme.of(context).cardColor,
                             title: Text(
-                              'Response From:${attendanceMap['name']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
+                              '${attendanceMap['datetime']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Submission Date: ${attendanceMap['datetime']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
                                 Text(
-                                  'Task Name: ${attendanceMap['task_name']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
-                                Text(
-                                  'Task Description: ${attendanceMap['task_description']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
-                                Text(
-                                  'Task status: ${attendanceMap['status']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
+                                  ' ${attendanceMap['description']}',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold),),
 
 
                               ],

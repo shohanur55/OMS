@@ -44,9 +44,10 @@ class _HranditState extends State<Hrandit> {
               itemCount: textlist.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> textItem = textlist[index] as Map<String, dynamic>;
+                int i=index+1;
                 return ListTile(
                   title: Text(textItem['text'] ?? 'No Text'),
-                  leading: Text(index.toString()),
+                  leading: Text(i.toString()),
                 );
               },
             );

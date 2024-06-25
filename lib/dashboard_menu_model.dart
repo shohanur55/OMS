@@ -54,6 +54,13 @@ class DashboardMenuModel {
       return "${folder}img.png";
     }else if (menuId == 1354) {
       return "${folder}add_employee.png";
+    }else if (menuId == 1355) {
+      return "${folder}contact.png";
+    }else if (menuId == 1356) {
+      return "${folder}contact.png";
+    }
+    else if (menuId == 1357) {
+      return "${folder}history.png";
     } else {
       return "${folder}in_progress.png";
     }

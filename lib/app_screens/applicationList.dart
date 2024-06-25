@@ -92,7 +92,7 @@ TextEditingController results=TextEditingController();
 
                         CustomTextField1(
                           textEditingController: results,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.none,
                           hintText: "Please type accepted or rejected",
                           svg: "lib/assets/icons/message_icon.svg",
                           //validator: (value) => !_controller.isEmail.value ? null : emailValidation(_controller.email),

@@ -60,7 +60,7 @@ class _ContactwithitState extends State<Contactwithit> {
               ),
               child: TextField(
                 decoration:
-                InputDecoration(labelText: 'Enter Ruels and Regulations,',),
+                InputDecoration(labelText: 'Enter your Description message',),
                 controller: textc,
                 keyboardType: TextInputType.multiline,
                 minLines: 5, // <-- SEE HERE

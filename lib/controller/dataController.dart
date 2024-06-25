@@ -8,6 +8,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../dashboard_menu_model.dart';
 class DataController extends GetxController{
   final RxBool isConnected = true.obs;
+String departments="";
 
   Future<void> initApp() async {
     await _networkConnectivity();

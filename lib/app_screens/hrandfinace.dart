@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_series/app_screens/financeReply.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class hrandFinance extends StatefulWidget {
   const hrandFinance({super.key});
@@ -28,6 +30,11 @@ class _hrandFinanceState extends State<hrandFinance> {
     return Scaffold(
       appBar: AppBar(
         title: Text("HR and Finance "),
+        actions: [
+          IconButton(onPressed: (){
+            Get.to(()=>financereply());
+          }, icon: Icon(Icons.message_rounded)),
+        ],
       ),
       body:  FutureBuilder<List<dynamic>>(
         future: fetchTextList(),
@@ -44,9 +51,10 @@ class _hrandFinanceState extends State<hrandFinance> {
               itemCount: textlist.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> textItem = textlist[index] as Map<String, dynamic>;
+                int i=index+1;
                 return ListTile(
                   title: Text(textItem['text'] ?? 'No Text'),
-                  leading: Text(index.toString()),
+                  leading: Text(i.toString()),
                 );
               },
             );

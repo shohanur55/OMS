@@ -193,7 +193,7 @@ TextEditingController desc=TextEditingController();
                     width: borderWidth2,
                     strokeAlign: BorderSide.strokeAlignOutside,
                     color: Theme.of(context).cardColor),
-                child: const Text("Save Account"),
+                child: const Text("Send"),
                 onTap: () async{
                 await sendData();
 

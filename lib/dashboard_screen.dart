@@ -218,7 +218,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   });
                   UiHelper.logoutdialog(context, "Are You Sure For Logout?");
                 },
-                icon: const Icon(Icons.more_vert)),
+                icon: const Icon(Icons.logout_outlined)),
 
 
             //IconButton(onPressed: _controller.onPressDrawerButton, icon: const Icon(Icons.more_vert_rounded))
